@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    #widget-container {
+      position: relative;
+      width: 300px;
+      height: 250px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .widget-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    #button-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      cursor: pointer;
+    }
+
+    #image4 {
+      display: block;
+      width: 94px;
+      height: 38px;
+      margin-top: 198px;
+      margin-left: 93px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="widget-container">
+    <img id="image0" class="widget-image" src="300x250_1.gif" alt="Image 0">
+    <img id="image1" class="widget-image" src="300x250_2.gif" alt="Image 1">
+    <img id="image2" class="widget-image" src="300x250_3.gif" alt="Image 2">
+    <img id="image3" class="widget-image" src="300x250_4.jpg" alt="Image 3">
+  </div>
+
+  <a id="button-container" href="https://ustore.lk/collections/sunlight" target="_blank" rel="noopener noreferrer">
+    <img id="image4" class="widget-image" src="Asset 1.png" alt="Image 4" target="_blank" />
+  </a>
+
+  <script>
+    const images = document.querySelectorAll('.widget-image');
+    let currentImageIndex = 0;
+
+    function showNextImage() {
+      images[currentImageIndex].style.display = 'none';
+      currentImageIndex++;
+
+      if (currentImageIndex < images.length) {
+        images[currentImageIndex].style.display = 'block';
+        if (currentImageIndex === 1) {
+
+          // Add click event listener for the second image
+          images[currentImageIndex].addEventListener('click', showNextImage);
+
+        }
+
+        if (currentImageIndex === 2) {
+          const apiUrl = 'https://widget-cms.adstudio.cloud/api/lavendra/1';
+
+          // Make a GET request
+          fetch(apiUrl,{
+            method: 'POST',
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+          // After clicking on the second image, go to the third image after 5 seconds
+          setTimeout(showNextImage, 10000);
+        }
+
+        if (currentImageIndex === 3) {
+          console.log("llll")
+          // Show the button after the fourth image
+          document.getElementById('button-container').style.display = 'block';
+
+          // Add a click event listener to the button
+          // Corrected code: Use document.getElementById to directly reference the button container
+          document.getElementById('button-container').addEventListener('click', function () {
+            // Make the API call when the button is clicked
+            callApi('https://widget-cms.adstudio.cloud/api/lavendra/2');
+          });
+
+          // Function to make the API call
+          function callApi(apiEndpoint) {
+            // You can use various methods to make the API call, such as fetch or XMLHttpRequest
+            // Here, we'll use the fetch API for simplicity
+            fetch(apiEndpoint,{
+              method: 'POST',
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              })
+              .then(data => {
+                // Handle the API response data as needed
+                console.log('API response:', data);
+              })
+              .catch(error => {
+                // Handle errors during the API call
+                console.error('Error during API call:', error);
+              });
+          }
+        }
+
+      }
+    }
+
+    // Show the first image
+    images[currentImageIndex].style.display = 'block';
+
+    // Start the sequence after 1 second
+    setTimeout(showNextImage, 1000);
+  </script>
+
+</body>
+
+</html>
